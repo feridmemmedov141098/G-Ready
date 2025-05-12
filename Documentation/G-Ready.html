@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Ready Blender Addon Documentation</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+        }
+        h1 {
+            text-align: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        details {
+            background-color: #ecf0f1;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        summary {
+            font-weight: bold;
+            cursor: pointer;
+            color: #2980b9;
+            font-size: 1.1em;
+        }
+        summary:hover {
+            color: #3498db;
+        }
+        ul {
+            margin-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        code {
+            background-color: #e0e0e0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 5px solid #ffeeba;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .experimental {
+            color: #c0392b;
+            font-weight: bold;
+        }
+        .usage-note {
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>G-Ready Blender Addon Documentation</h1>
+
+        <p><strong>Version:</strong> 1.2.1</p>
+        <p><strong>Author:</strong> Farid Mammadov (Pivot Point)</p>
+        <p><strong>Location in Blender:</strong> 3D Viewport > Sidebar (N-Panel) > G-Ready Tab</p>
+
+        <details>
+            <summary>1. Introduction</summary>
+            <p>G-Ready is a comprehensive toolkit designed by 3D Artist Farid Mammadov to significantly speed up the game asset creation workflow in Blender. It bundles a wide array of tools for:</p>
+            <ul>
+                <li><strong>Modeling:</strong> SubD modeling helpers, Boolean workflow enhancements, edge/surface selection.</li>
+                <li><strong>Shading & Texturing:</strong> Bevel Node shading setup, versatile texture baking.</li>
+                <li><strong>Optimization & Workflow:</strong> LOD generation, Vertex Color operations, UnBevel/ReBevel tools.</li>
+                <li><strong>Naming:</strong> Flexible Auto Renaming for baking.</li>
+            </ul>
+        </details>
+
+        <details>
+            <summary>2. Installation</summary>
+            <ol>
+                <li>Go to <code>Edit > Preferences > Add-ons</code>.</li>
+                <li>Click <code>Install...</code> and navigate to the <code>G-Ready_vx.x.x.zip</code> file.</li>
+                <li>Select the file and click <code>Install Add-on</code>.</li>
+                <li>Find "G-Ready" in the add-ons list and enable it by checking the box.</li>
+                <li>The "G-Ready" tab will appear in the 3D Viewport's N-Panel.</li>
+            </ol>
+        </details>
+
+        <details open>
+            <summary>3. Main Panel Overview & Features</summary>
+            <p>The G-Ready panel is organized into several sections, each catering to specific tasks:</p>
+
+            <details>
+                <summary>A. SubD Modeling</summary>
+                <p>Tools to streamline common hard-surface and SubD modeling tasks.</p>
+                <h4>Object Mode Buttons:</h4>
+                <ul>
+                    <li><code>Add Mirror</code>: Adds a Mirror Modifier (X-Axis, Bisect, Clip).</li>
+                    <li><code>Add Bevel</code>: Adds a Bevel Modifier (Limit: Weight, Segments: 1).</li>
+                    <li><code>Add SubD</code>: Adds a Subdivision Surface Modifier (Levels: 2).</li>
+                    <li><code>Add Decimate</code>: Adds a Decimate Modifier (Mode: Un-Subdivide, Iterations: 2) to selected objects and any other objects sharing the same mesh data.</li>
+                </ul>
+                <h4>Edit Mode Buttons (requires mesh selection):</h4>
+                <ul>
+                    <li><code>Bevel W</code> (Slider & Apply): Applies the slider value as Bevel Weight to selected edges.</li>
+                    <li><code>X</code> (next to Bevel W): Resets Bevel Weight to 0 for selected edges.</li>
+                    <li><code>Crease</code> (Slider & Apply): Applies the slider value as Crease to selected edges.</li>
+                    <li><code>X</code> (next to Crease): Resets Crease to 0 for selected edges.</li>
+                </ul>
+            </details>
+
+            <details>
+                <summary>B. Object Controls</summary>
+                <p>Manage modifiers and object properties across multiple selections.</p>
+                <h4>SubD Level:</h4>
+                <ul>
+                    <li><code>Sync</code> (UV Sync Icon): Syncs SubD levels of selected objects (and linked-data instances) to match the active object's SubD level.</li>
+                    <li><code>+/- Buttons</code>: Increases/decreases SubD levels for all selected objects (and linked-data instances).</li>
+                </ul>
+                <h4>Toggle Modifiers:</h4>
+                <p>Quickly show/hide modifiers in the viewport. These toggles affect selected objects and any other objects sharing the same mesh data.</p>
+                <ul>
+                    <li><code>Toggle Booleans</code>: Toggles all Boolean modifiers. Also hides/unhides linked-data-only objects that weren't part of the initial selection.</li>
+                    <li><code>Toggle SubD & Bevel</code>: Toggles all Subdivision Surface and Bevel modifiers.</li>
+                    <li><code>Toggle Decimate</code>: Toggles all Decimate modifiers.</li>
+                    <li><code>Toggle Last Boolean</code>: Toggles only the <em>last</em> Boolean modifier in the stack, provided its operand object matches the last Boolean operand of the active/reference object. Useful for iterating on specific cuts.</li>
+                </ul>
+            </details>
+
+            <details>
+                <summary>C. UnBevel Tools (Edit Mode Only)</summary>
+                <p>Tools for manipulating beveled edges.</p>
+                <ul>
+                    <li><code>Bevel Select</code>: A shortcut for <code>mesh.loop_multi_select</code> with <code>ring=True</code>, useful for selecting bevel edge loops.</li>
+                    <li><code>ReBevel</code>: Unbevels the selected edge chains to a sharp edge, merges the resulting vertices, and then immediately starts Blender's interactive Bevel tool (Shift+Ctrl+B).</li>
+                    <li><code>UnBevel</code>: Interactively removes the selected unbevel "segment" (the inner edges of a bevel).
+                        <ul>
+                            <li>Move mouse left/right to control the unbevel amount (from original to fully merged).</li>
+                            <li><code>Edge Slide</code> (Checkbox): When enabled, the unbevel operation attempts to slide the outer vertices along their adjacent edges, helping to preserve the surrounding curvature. When disabled, vertices move linearly towards a calculated pivot.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <p class="usage-note">Usage for UnBevel/ReBevel: Select the <em>inner</em> edges of a bevel chain (not the outer "rail" edges).</p>
+            </details>
+
+            <details>
+                <summary>D. Selection Tools (Edit Mode Only)</summary>
+                <p>Advanced selection operators.</p>
+                <h4>Easy Loop (Factor Edge Select):</h4>
+                <ul>
+                    <li>Selects edge loops based on angle similarity. Adjust the <code>Threshold Factor</code> (0 = 0°, 1 = 180°) to control how sharp an angle the selection can turn.</li>
+                    <li class="usage-note">Usage: Select one or more starting edges of a loop.</li>
+                </ul>
+                <h4>Select Surface:</h4>
+                <ul>
+                    <li>Selects connected faces based on the angle between their normals. Set the <code>Angle Threshold (Degrees)</code>.</li>
+                    <li class="usage-note">Usage: Select one or more starting faces. The operator will expand the selection to adjacent faces as long as the angle between them is less than the threshold AND the connecting edge is marked as "smooth".</li>
+                </ul>
+            </details>
+
+            <details>
+                <summary>E. Boolean Cleanup (Edit Mode Only)</summary>
+                <ul>
+                    <li><code>Boolean Cleanup</code>: An interactive tool to help resolve n-gons often created by Boolean operations.</li>
+                    <li class="usage-note">Usage: Select a loop of edges that forms the boundary of an n-gon (or a problematic area). The operator will:
+                        <ol>
+                            <li>Attempt to identify two "sides" (Group A & B) of the selected edge loop.</li>
+                            <li>Enter an interactive mode where you can adjust a <code>Distance Limit</code> with the mouse (left/right). Vertices from one group (mover) will snap to the closest vertices of the other group (target) if they are within this limit.</li>
+                            <li><code>Mouse Wheel</code>: Swaps which group is the mover.</li>
+                            <li><code>LMB</code>: Confirms the merge. Vertices are snapped, and then <code>Merge by Distance</code> is applied to the affected area.</li>
+                            <li><code>RMB/ESC</code>: Cancels.</li>
+                        </ol>
+                    </li>
+                </ul>
+            </details>
+        </details>
+
+        <details>
+            <summary>4. Sub-Panels (Collapsible Sections)</summary>
+
+            <details>
+                <summary>A. Bevel Shader</summary>
+                <p><strong>Purpose:</strong> Quickly set up a material for faked edge highlights using Cycles' Bevel Node. This is useful for high-poly visualizations or bakes where you don't want actual bevel geometry.</p>
+                <h4>Controls:</h4>
+                <ul>
+                    <li><code>Radius</code> (Slider): Controls the radius of the Bevel Node effect.</li>
+                    <li><code>Apply Bevel Shading</code>:
+                        <ul>
+                            <li>Sets Render Engine to Cycles and configures GPU, samples, denoising.</li>
+                            <li>Sets Viewport to Rendered, disables scene lights/world, and sets a specific studio light (<code>city.exr</code>).</li>
+                            <li>Modifies the active material of selected objects:
+                                <ul>
+                                    <li>Ensures a Principled BSDF is connected to the Material Output.</li>
+                                    <li>Sets Principled BSDF: Metallic to 1.0, Roughness to 0.3, Base Color to a mid-grey (#7C7C7C), unless inputs are already linked by textures.</li>
+                                    <li>Adds or updates a Bevel Node, connecting it to the Principled BSDF's Normal input.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><code>Remove Bevel</code>: Removes the Bevel Node from the materials of selected objects and attempts to reconnect any previous normal inputs.</li>
+                </ul>
+            </details>
+
+            <details>
+                <summary>B. Auto Rename Tools</summary>
+                <p><strong>Purpose:</strong> Prepare objects for high-to-low poly baking by renaming them according to common conventions (e.g., <code>ObjectName_low</code>, <code>ObjectName_high</code>, <code>ObjectName_cage</code>) and moving them into corresponding collections.</p>
+                <h4>Controls:</h4>
+                <ul>
+                    <li><code>Auto Rename Selected</code> (Button):
+                        <ul>
+                            <li>Pairs selected meshes based on <code>Poly Count</code> (to determine low/high) and optionally <code>Bounding Box Similarity</code> and/or <code>Pivot Point Proximity</code> (controlled by checkboxes and thresholds).</li>
+                            <li><code>Rename Mode</code>:
+                                <ul>
+                                    <li><code>Numerical</code>: Pairs are named <code>0_low</code>, <code>0_high</code>, <code>1_low</code>, <code>1_high</code>, etc.</li>
+                                    <li><code>High -> Low</code>: Base name is taken from the identified high-poly object.</li>
+                                    <li><code>Low -> High</code>: Base name is taken from the identified low-poly object.</li>
+                                </ul>
+                            </li>
+                            <li>Moves renamed objects to "Low", "High", and "Cage" collections.</li>
+                            <li>Matches selected <code>_cage</code> objects to their corresponding final <code>_low</code> objects.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </details>
+
+            <details>
+                <summary>C. Bake</summary>
+                <p><strong>Purpose:</strong> A comprehensive baking toolkit supporting various workflows.</p>
+                <h4>Baking Operations:</h4>
+                <ul>
+                    <li><code>Use GPU</code> (Checkbox): Toggles Cycles device between GPU and CPU.</li>
+                    <li><code>Create Cages</code>:
+                        <ul>
+                            <li>Duplicates objects from the "Low" collection to create cage meshes.</li>
+                            <li>Moves them to a "Cage" collection.</li>
+                            <li>Applies a <code>Cage Offset</code> (Shrink/Fatten).</li>
+                            <li>Optionally applies a "No Skew" (Edge Split modifier with Angle/Sharp Edges) before offsetting to improve cage quality on hard edges.</li>
+                            <li>Sets object colors for Low (white), High (red), Cage (green) and sets viewport shading to Object Color.</li>
+                        </ul>
+                    </li>
+                     <li><code>Visualize Ray Distance</code> (Eye Icon next to Max Ray Distance): Creates visualizer objects that show the current <code>Max Ray Distance</code> setting as a solidify modifier. Updates live. Click again or use <code>Remove Max Ray Distance Visualization</code> to remove them.</li>
+                </ul>
+                <h4>Bake Settings:</h4>
+                <ul>
+                    <li><code>Bake Mode</code>:
+                        <ul>
+                            <li><code>High to Low</code>: Standard selected-to-active baking. Requires selecting <code>_low</code> suffixed objects. High-polys are found by name (<code>_high</code>, <code>_high.xxx</code>).</li>
+                            <li><code>Low Only</code>: Bakes properties from the object itself (e.g., Ambient Occlusion on the low-poly).</li>
+                        </ul>
+                    </li>
+                    <li><code>Bake Map Type</code>: Standard Blender bake types (Normal, AO, Combined, etc.).</li>
+                    <li><code>Normal Format</code> (if Bake Type is Normal): OpenGL (+Y) or DirectX (-Y).</li>
+                    <li><code>Resolution Preset</code> / <code>Custom Width/Height</code>: Output texture size.</li>
+                    <li><code>Anti-Alias Output (Compositor)</code>: <span class="experimental">EXPERIMENTAL.</span> Renders the baked image through the Compositor's Anti-Aliasing node. Slower, clears existing Compositor setup.</li>
+                    <li><code>Samples</code>: Cycles baking samples.</li>
+                    <li><code>Margin (px)</code>: Pixel margin for the bake.</li>
+                    <li><code>Use Cage Object</code> / <code>Extrusion</code> / <code>Max Ray Distance</code>: Standard Blender bake cage settings.</li>
+                </ul>
+                <h4>Save Image:</h4>
+                <ul>
+                    <li><code>Output Directory</code>: Where to save baked maps (in a "baked_maps" subfolder).</li>
+                    <li><code>Image Format</code> & Format Options: PNG, JPEG, TIFF, etc., with relevant compression, bit depth, and color mode settings.</li>
+                </ul>
+                <h4>Bake Buttons:</h4>
+                <ul>
+                    <li><code>Bake Selected (Closest Hit)</code>:
+                        <ul>
+                            <li>Performs a standard Blender bake.</li>
+                            <li>In High-to-Low mode, it bakes <em>all</em> found <code>_high</code> and <code>_high.xxx</code> meshes for a given <code>_low</code> object simultaneously onto the <code>_low</code> object.</li>
+                            <li>Uses a single shared image texture for all selected <code>_low</code> objects being baked to.</li>
+                        </ul>
+                    </li>
+                    <li><code>Matrix Bake</code>:
+                        <ul>
+                            <li><span class="experimental">EXPERIMENTAL.</span> For batch baking multiple assets.</li>
+                            <li><em>High-to-Low:</em> Duplicates all <code>_low</code>/<code>_high</code>/<code>_cage</code> trios found in the scene, distributes them in a grid, joins all low-polys into one, all high-polys into one, etc., then bakes these combined meshes.</li>
+                            <li><em>Low Only:</em> Duplicates selected meshes, distributes, joins, then bakes.</li>
+                            <li><code>Keep Combined After Bake</code>: If checked, the temporary combined meshes used for baking are not deleted.</li>
+                        </ul>
+                    </li>
+                    <li><code>Decal Bake (Sequential)</code>:
+                        <ul>
+                            <li>For High-to-Low mode only.</li>
+                            <li>Bakes multiple <code>_high.xxx</code> meshes onto a single <code>_low</code> mesh <em>sequentially</em>, one after another, in numerical order of the suffix (e.g., <code>_high</code>, then <code>_high.001</code>, then <code>_high.002</code>).</li>
+                            <li>Uses a smaller margin (1px) for <code>_high.xxx</code> meshes, and the user-defined margin for the base <code>_high</code> mesh.</li>
+                            <li>Ideal for baking layered details like decals or panel lines where later bakes should precisely overlay earlier ones.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </details>
+
+            <details>
+                <summary>D. Vertex Color Tools (Edit Mode Only)</summary>
+                <p><strong>Purpose:</strong> Apply vertex colors to selected mesh components using Blender's Vertex Paint operators behind the scenes.</p>
+                <h4>Controls:</h4>
+                <ul>
+                    <li><code>Color Picker</code> & <code>Apply</code>: Sets selected vertices to the chosen color.</li>
+                    <li><code>Random</code>: Applies a unique random color to the selected vertices. Ensures the color is not already present (within tolerance) on other parts of the mesh.</li>
+                    <li><code>Select by Color</code>: Selects faces with an average vertex color similar to the initially selected face(s). Adjustable <code>Tolerance</code> in the Redo Last panel.</li>
+                </ul>
+                <p class="usage-note">Note: These operators automatically set viewport shading to "Vertex Color" to visualize results.</p>
+            </details>
+
+            <details>
+                <summary>E. LOD Generator</summary>
+                <p><strong>Purpose:</strong> Generate a specified number of Level of Detail (LOD) meshes from selected objects.</p>
+                <h4>Controls:</h4>
+                <ul>
+                    <li><code>Max LOD Level</code>: Number of LODs to generate (e.g., 3 creates LOD0, LOD1, LOD2, LOD3).</li>
+                    <li><code>Generate LODs</code>:
+                        <ol>
+                            <li>The selected object is renamed to <code>BaseName_LOD0</code> and moved to an "LOD0" collection.</li>
+                            <li>For each subsequent LOD level (LOD1, LOD2, ...):
+                                <ol type="a">
+                                    <li>LOD0 is duplicated.</li>
+                                    <li>A Decimate modifier (Collapse, Triangulate) is applied with a progressively smaller ratio (e.g., LOD1=0.5, LOD2=0.25).</li>
+                                    <li>The decimated mesh is moved to a corresponding "LODx" collection.</li>
+                                </ol>
+                            </li>
+                            <li>After all LODs (1-N) are generated, the following batch operations are applied <em>only to LOD1 through LODN</em>:
+                                <ol type="a">
+                                    <li>Clear Custom Split Normals data.</li>
+                                    <li>Shade Auto Smooth (default 30 degrees).</li>
+                                    <li>Convert to Mesh (to apply auto smooth).</li>
+                                    <li>Add Weighted Normal modifier.</li>
+                                    <li>Enable "Keep Sharp" on the Weighted Normal modifier.</li>
+                                    <li>Convert to Mesh again (to apply weighted normal).</li>
+                                </ol>
+                            </li>
+                        </ol>
+                    </li>
+                </ul>
+            </details>
+
+            <details>
+                <summary>F. Contact</summary>
+                <ul>
+                    <li>Links to Pivot Point's YouTube and X (Twitter).</li>
+                    <li>Button to copy Farid Mammadov's contact email to the clipboard.</li>
+                </ul>
+            </details>
+
+        </details>
+
+        <details>
+            <summary>5. Warnings & Experimental Features</summary>
+            <div class="warning">
+                <p>The addon is still in development, so some bugs may be present.</p>
+                <ul>
+                    <li><strong>Compositor AA (Baking):</strong> This feature is <span class="experimental">EXPERIMENTAL</span>. It will clear your existing Compositor node setup to perform anti-aliasing.</li>
+                    <li><strong>Matrix Bake:</strong> This feature is <span class="experimental">EXPERIMENTAL</span> and may have unexpected behavior with complex scenes or many objects.</li>
+                </ul>
+            </div>
+        </details>
+    </div>
+</body>
+</html>
